@@ -71,7 +71,7 @@ class Enemy extends Entity {
         // all computers.
         if (this.isColiding()) {
             let bite = new Audio();
-            bite.src="../sounds/bite.mp3";
+            bite.src="sounds/bite.mp3";
             bite.play();
 
             player.reset();
@@ -123,7 +123,7 @@ class Player extends Entity {
             this.y = 0;
             alert('congratulations you won the game');
             let winning  = new Audio();
-            winning.src="../sounds/win.mp3";
+            winning.src="sounds/win.mp3";
             winning.play();
             this.isGameWon = true;
             this.reset();
@@ -165,7 +165,7 @@ class Collectable extends Entity {
             this.x = NaN;
             this.y = NaN;
             let eat = new Audio();
-            eat.src="../sounds/eat.mp3";
+            eat.src="sounds/eat.mp3";
             eat.play();
         }
     }
