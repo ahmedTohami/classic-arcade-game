@@ -8,12 +8,15 @@
 // a helper we've provided to easily load images
 
 class Entity {
-    constructor({ x = 0, y = 0, speed = 50, sprite = '' } = {}) {
+    constructor({ x = 0, y = 0, speed = 50, sprite = '', width = 70, height = 70 } = {}) {
         this._x = x;
         this._y = y;
         this._speed = speed;
         this._sprite = sprite;
+        this._width = width;
+        this._height = height;
     }
+
     get x() {
         return this._x;
     }
@@ -23,11 +26,17 @@ class Entity {
     get speed() {
         return this._speed;
     }
-
-
+    get width() {
+        return this._width;
+    }
+    get height() {
+        return this._height;
+    }
     get sprite() {
         return this._sprite;
     }
+
+
     set speed(speed) {
         this._speed = speed;
     }
@@ -39,6 +48,12 @@ class Entity {
     }
     set sprite(sprite) {
         this._sprite = sprite;
+    }
+    set height(val) {
+        this._height = val;
+    }
+    set width(val) {
+        this._width = val;
     }
 
 
@@ -56,8 +71,8 @@ class Entity {
 
 
 class Enemy extends Entity {
-    constructor({ x = 200, y = 100, speed = 50, sprite = 'images/enemy-bug.png', player = {} } = {}) {
-        super({ x, y, speed, sprite });
+    constructor({ x = 200, y = 100, speed = 50, sprite = 'images/enemy-bug.png', player = {} ,width =80 ,height=51 } = {}) {
+        super({ x, y, speed, sprite ,width, height});
         this.player = player;
     }
 
@@ -71,17 +86,24 @@ class Enemy extends Entity {
         // all computers.
         if (this.isColiding()) {
             let bite = new Audio();
-            bite.src="../sounds/bite.mp3";
+            bite.src = "sounds/bite.mp3";
             bite.play();
 
             player.reset();
         }
     };
 
+    //i used code presented in https://tutorialedge.net/gamedev/aabb-collision-detection-tutorial/
     isColiding() {
-        var a = player.x - this.x;
-        var b = player.y - this.y;
-        return Math.sqrt(a * a + b * b) < 50;
+
+        if (this.x < this.player.x + this.player.width &&
+            this.x + this.width > this.player.x &&
+            this.y < this.player.y + this.player.height &&
+            this.y + this.height > this.player.y) {
+
+            return true;
+        }
+        return false;
     }
 }
 
@@ -89,8 +111,8 @@ class Enemy extends Entity {
 // This class requires an update(), render() and
 // a handleInput() method.
 class Player extends Entity {
-    constructor({ x = 450, y = 450, speed = 50, sprite = 'images/char-boy.png' } = {}) {
-        super({ x, y, speed, sprite });
+    constructor({ x = 450, y = 450, speed = 50, sprite = 'images/char-boy.png' } = {},width =70 ,height=70) {
+        super({ x, y, speed, sprite  ,width ,height});
         this.initialPosX = x;
         this.isGameWon = false;
         this.initialPosY = y;
@@ -122,8 +144,8 @@ class Player extends Entity {
         if (this.y <= 0) {
             this.y = 0;
             alert('congratulations you won the game');
-            let winning  = new Audio();
-            winning.src="../sounds/win.mp3";
+            let winning = new Audio();
+            winning.src = "sounds/win.mp3";
             winning.play();
             this.isGameWon = true;
             this.reset();
@@ -132,19 +154,15 @@ class Player extends Entity {
     };
     handleInput(key) {
         if (key == 'left') {
-            console.log('left pressed');
             this.x -= 50;
         }
         else if (key == 'right') {
-            console.log('right pressed');
             this.x += 50;
         }
         else if (key == 'up') {
-            console.log('up pressed');
             this.y -= 50;
         }
         else if (key == 'down') {
-            console.log('down pressed');
             this.y += 50;
         }
     }
@@ -165,7 +183,7 @@ class Collectable extends Entity {
             this.x = NaN;
             this.y = NaN;
             let eat = new Audio();
-            eat.src="../sounds/eat.mp3";
+            eat.src = "sounds/eat.mp3";
             eat.play();
         }
     }
