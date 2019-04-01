@@ -1,4 +1,4 @@
-# memory game
+# classic arcade game
 this project is a simple javascript arcade game as an application on OOP in js
 
 # how to use
